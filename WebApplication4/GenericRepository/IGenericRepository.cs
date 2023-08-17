@@ -1,0 +1,14 @@
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace WebApplication4.GenericRepository
+{
+    public interface IGenericRepository<T> : IDisposable where T : class
+    {
+        IEnumerable<T> GetAll();
+        T GetById(object id);
+        void Insert(T obj);
+        void Update(T obj);
+        void Delete(object id);
+        void Save();
+    }
+}
