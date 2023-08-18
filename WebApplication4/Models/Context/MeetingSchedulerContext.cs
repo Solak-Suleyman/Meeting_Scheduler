@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Entity;
+
 using System.Security.Cryptography;
 using System.Text;
 using WebApplication4.Models.Entity;

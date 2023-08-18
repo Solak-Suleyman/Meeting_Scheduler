@@ -5,6 +5,7 @@ namespace WebApplication4.Models.Entity
     [Table("users")]
     public class User
     {
+
         public int id { get; set; }
         public string user_name { get; set; }
         public string name { get; set; }
@@ -15,6 +16,6 @@ namespace WebApplication4.Models.Entity
         public DateTime updated_time { get; set;}
         //public UserMeeting UserMeeting { get; set; }
 
-        public ICollection<UserMeeting> UserMeeting { get; set; }
+        public  ICollection<UserMeeting> UserMeeting { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace WebApplication4.GenericRepository
 {
-    public interface IGenericRepository<T> : IDisposable where T : class
+    public interface IGenericRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
         T GetById(object id);

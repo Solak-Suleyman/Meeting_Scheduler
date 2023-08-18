@@ -1,57 +1,82 @@
 ﻿using Microsoft.Build.Construction;
-using System.Data.Entity;
+
 using WebApplication4.Models.Context;
-using System.Data.Entity;
+
 using System.Linq;
+using System.Linq.Expressions;
 using System.Collections.Generic;
+using WebApplication4.UnitOfWork;
+using WebApplication4.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication4.GenericRepository
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : class
+    public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T : class
     {
-        public MeetingSchedulerContext _context=null;
-        public Microsoft.EntityFrameworkCore.DbSet<T> table = null;
-        public GenericRepository()
+
+        public DbSet<T> _entities;
+        private string _errorMessage = string.Empty;
+        private bool _isDisposed = false;
+
+        public GenericRepository(IUnitOfWork<MeetingSchedulerContext> unitOfWork)
+            : this(unitOfWork.Context)
         {
-            this._context = new MeetingSchedulerContext();
-            
-            table = _context.Set<T>();
+        }
+
+        public GenericRepository(MeetingSchedulerContext context)
+        {
+            Context = context;
+        }
+
+        public MeetingSchedulerContext Context { get; set; }
+        protected virtual DbSet<T> Entities
+        {
+            get { _entities = Context.Set<T>();
+                return _entities;
+            }
         }
 
         public void Delete(object id)
         {
-            T existing = table.Find(id);
-            table.Remove(existing);
+            throw new NotImplementedException();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (Context != null)
+                Context.Dispose();
+            _isDisposed = true;
         }
-
-        public IEnumerable<T> GetAll()
+        public virtual IEnumerable<T> GetAll()
         {
-            return table.ToList();
+            return Entities.ToList();
         }
-        public T GetById(object id) {
-            return table.Find(id);
+        public virtual T GetById(object id)
+        {
+            return Entities.Find(id);
         }
 
         public void Insert(T obj)
         {
-            table.Add(obj);
-        
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            if (Context==null ||_isDisposed)
+            {
+                Context = new MeetingSchedulerContext();
+            }
+            Entities.Add(obj);
         }
 
         public void Save()
         {
-            _context.SaveChanges();
+            throw new NotImplementedException();
         }
 
         public void Update(T obj)
         {
-            table.Attach(obj);
-            _context.Entry(obj).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            throw new NotImplementedException();
         }
     }
 }
