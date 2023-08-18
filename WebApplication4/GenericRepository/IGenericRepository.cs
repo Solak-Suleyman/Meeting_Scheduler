@@ -9,6 +9,6 @@ namespace WebApplication4.GenericRepository
         void Insert(T obj);
         void Update(T obj);
         void Delete(object id);
-        void Save();
+
     }
 }

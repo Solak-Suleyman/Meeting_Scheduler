@@ -4,7 +4,8 @@ namespace WebApplication4.NonGenericRepository
 {
     public interface IUserRepository
     {
-        IEnumerable<User> ADDUser(User user);
+        IEnumerable<User> GetByUserName(string user_name);
+
 
     }
 }

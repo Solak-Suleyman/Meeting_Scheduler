@@ -11,6 +11,7 @@ using WebApplication4.GenericRepository;
 using WebApplication4.UnitOfWork;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using AutoMapper;
+using WebApplication4.NonGenericRepository;
 
 namespace WebApplication4.Controllers
 {
@@ -20,18 +21,20 @@ namespace WebApplication4.Controllers
     {
         private IUnitOfWork<MeetingSchedulerContext>unitOfWork=new UnitOfWork<MeetingSchedulerContext>();
         private GenericRepository<User> genericRepository;
+        private IUserRepository userRepository;
         private readonly IMapper _mapper;
 
-        public UsersController(IMapper mapper
-            )
+        public UsersController(IMapper mapper)
         {
             this.genericRepository = new GenericRepository<User>(unitOfWork);
+            this.userRepository=new UserRepository(unitOfWork);
             this._mapper = mapper;
         }
 
+
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-        public IActionResult Get_users(int id)
+        public IActionResult Get_users()
         {
             //try
             //{
@@ -57,6 +60,15 @@ namespace WebApplication4.Controllers
         {
             var response=genericRepository.GetById(id);
             return new JsonResult(response);
+        }
+
+        [HttpGet]
+        [Route("/api/users/GetByUserName")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        public IActionResult Getuser([FromQuery] string user_name)
+        {
+            var response = userRepository.GetByUserName(user_name);
+            return Ok(response);
         }
 
         [HttpPost]
@@ -93,6 +105,25 @@ namespace WebApplication4.Controllers
                 unitOfWork.Rollback();
             }
             return Ok();
+        }
+        [HttpPost]
+        [Route("/api/user/editUser")]
+        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(User))]
+        public ActionResult EditUser(UsersDTO user)
+        {
+            User userr= genericRepository.GetById(user.id);
+            User user1 = _mapper.Map<User>(userr);
+            if (ModelState.IsValid)
+            {
+                genericRepository.Update(user1);
+                unitOfWork.Commit();
+                unitOfWork.Save();
+                return Ok(user1);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         //    public IActionResult Get(int id) {

@@ -69,14 +69,20 @@ namespace WebApplication4.GenericRepository
             Entities.Add(obj);
         }
 
-        public void Save()
-        {
-            throw new NotImplementedException();
-        }
+
 
         public void Update(T obj)
         {
-            throw new NotImplementedException();
+            if(obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            if (Context==null ||_isDisposed)
+            {
+                Context=new MeetingSchedulerContext();
+            }
+            Entities.Attach(obj);
+            Context.Entry(obj).State = EntityState.Modified;
         }
     }
 }
