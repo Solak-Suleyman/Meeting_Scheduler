@@ -10,6 +10,7 @@ using WebApplication4.Models.DTO;
 using WebApplication4.GenericRepository;
 using WebApplication4.UnitOfWork;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
+using AutoMapper;
 
 namespace WebApplication4.Controllers
 {
@@ -19,9 +20,13 @@ namespace WebApplication4.Controllers
     {
         private IUnitOfWork<MeetingSchedulerContext>unitOfWork=new UnitOfWork<MeetingSchedulerContext>();
         private GenericRepository<User> genericRepository;
-        public UsersController()
+        private readonly IMapper _mapper;
+
+        public UsersController(IMapper mapper
+            )
         {
             this.genericRepository = new GenericRepository<User>(unitOfWork);
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -48,7 +53,7 @@ namespace WebApplication4.Controllers
         [HttpGet]
         [Route("/api/users/GetUserById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-        public IActionResult Get(int id)
+        public IActionResult Get([FromBody] int id)
         {
             var response=genericRepository.GetById(id);
             return new JsonResult(response);
@@ -61,21 +66,21 @@ namespace WebApplication4.Controllers
         {
             try
             {
-
                 unitOfWork.CreateTransaction();
                 if (ModelState.IsValid)
                 {
-                    User users = new User
-                    {
-                        id = user.id,
-                        user_name = user.user_name,
-                        name = user.name,
-                        surname = user.surname,
-                        password = user.password,
-                        status = user.status,
-                        created_time = DateTime.UtcNow,
-                        updated_time = DateTime.UtcNow
-                    };
+                    User users=_mapper.Map<User>(user);
+                    //User users = new User
+                    //{
+                    //    id = user.id,
+                    //    user_name = user.user_name,
+                    //    name = user.name,
+                    //    surname = user.surname,
+                    //    password = user.password,
+                    //    status = user.status,
+                    //    created_time = DateTime.UtcNow,
+                    //    updated_time = DateTime.UtcNow
+                    //};
                     genericRepository.Insert(users);
                     unitOfWork.Save();
                     unitOfWork.Commit();

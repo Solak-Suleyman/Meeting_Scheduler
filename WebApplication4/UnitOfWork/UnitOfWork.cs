@@ -1,10 +1,10 @@
-﻿using System.Data.Entity;
-using WebApplication4.Models.Context;
+﻿using WebApplication4.Models.Context;
 using System.Transactions;
-
+using Microsoft.EntityFrameworkCore.Internal;
 using System.Data.Entity.Validation;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace WebApplication4.UnitOfWork
 {
@@ -14,7 +14,7 @@ namespace WebApplication4.UnitOfWork
         public TContext Context { get; }
         private string _errorMessage = string.Empty;
         //The following Object is going to hold the Transaction Object
-        private DbContextTransaction _objTran;
+        private IDbContextTransaction _objTran;
 
         public UnitOfWork()
         {
@@ -31,12 +31,11 @@ namespace WebApplication4.UnitOfWork
         public void Dispose()
         {
             Dispose(true);
-
         }
 
         public void CreateTransaction()
         {
-            _objTran = (DbContextTransaction)Context.Database.BeginTransaction();
+            _objTran = Context.Database.BeginTransaction();
         }
 
         public void Commit()
