@@ -36,9 +36,17 @@ namespace WebApplication4.GenericRepository
             }
         }
 
-        public void Delete(object id)
+        public void Delete(T obj)
         {
-            throw new NotImplementedException();
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+            if (Context == null || _isDisposed)
+            {
+                Context = new MeetingSchedulerContext();
+            }
+            Entities.Remove(obj);
         }
 
         public void Dispose()

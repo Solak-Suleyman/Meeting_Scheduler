@@ -31,7 +31,7 @@ namespace WebApplication4.Controllers
             this._mapper = mapper;
         }
 
-
+        //get user table
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
         public IActionResult Get_users()
@@ -56,12 +56,13 @@ namespace WebApplication4.Controllers
         [HttpGet]
         [Route("/api/users/GetUserById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        //get by username
         public IActionResult Get([FromBody] int id)
         {
             var response=genericRepository.GetById(id);
             return new JsonResult(response);
         }
-
+        //get by username
         [HttpGet]
         [Route("/api/users/GetByUserName")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
@@ -70,7 +71,7 @@ namespace WebApplication4.Controllers
             var response = userRepository.GetByUserName(user_name);
             return Ok(response);
         }
-
+        //add new user
         [HttpPost]
         [Route("/api/user/createUser")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
@@ -106,6 +107,7 @@ namespace WebApplication4.Controllers
             }
             return Ok();
         }
+        //update existing user
         [HttpPost]
         [Route("/api/user/editUser")]
         [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(User))]
@@ -124,6 +126,30 @@ namespace WebApplication4.Controllers
             {
                 return BadRequest();
             }
+        }
+        [HttpDelete]
+        [Route("/api/user/banUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public void DeleteUser(int id)
+        {
+            unitOfWork.CreateTransaction();
+            User user = genericRepository.GetById(id);
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    genericRepository.Delete(user);
+                    unitOfWork.Commit();
+                    unitOfWork.Save();
+                }
+            }
+            catch (Exception)
+            {
+
+                unitOfWork.Rollback();
+            }
+            
+            
         }
 
         //    public IActionResult Get(int id) {
