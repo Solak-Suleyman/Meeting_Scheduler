@@ -114,34 +114,39 @@ namespace WebApplication4.Controllers
             return BadRequest("Girmedi");
         }
         //update existing user
-        [HttpPost]
-        [Route("/api/user/editUser")]
-        [ProducesResponseType(StatusCodes.Status200OK,Type = typeof(User))]
-        public ActionResult EditUser(UsersDTO user)
-        {
-            User userr= genericRepository.GetById(user.id);
-            User user1 = _mapper.Map<User>(userr);
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    genericRepository.Update(user1);
-                    unitOfWork.Commit();
-                    unitOfWork.Save();
-                    return Ok(user1);
-                }
-                else
-                {
-                    return BadRequest();
-                }
-            }
-            catch (Exception)
-            {
-                unitOfWork.Rollback();
-                return BadRequest();
-            }
+        //[HttpPost]
+        //[Route("/api/user/editUser")]
+        //[ProducesResponseType(StatusCodes.Status200OK,Type = typeof(User))]
+        //public ActionResult EditUser(UsersDTO user)
+        //{
+        //    unitOfWork.CreateTransaction();
+        //    User userr= genericRepository.GetById(user.id);
+        //    if (userr == null)
+        //    {
+        //        return BadRequest("Boş");      
+        //    }
+        //    User userr1 = _mapper.Map<User>(userr);
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            genericRepository.Update(userr1);
+        //            unitOfWork.Commit();
+        //            unitOfWork.Save();
+        //            return Ok(userr1);
+        //        }
+        //        else
+        //        {
+        //            return BadRequest();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        unitOfWork.Rollback();
+        //        return BadRequest(ex);
+        //    }
             
-        }
+        //}
         [HttpPatch]
         [Route("/api/user/editUserpartial")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]

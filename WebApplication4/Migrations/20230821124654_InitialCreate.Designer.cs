@@ -12,7 +12,7 @@ using WebApplication4.Models.Context;
 namespace WebApplication4.Migrations
 {
     [DbContext(typeof(MeetingSchedulerContext))]
-    [Migration("20230821091004_InitialCreate")]
+    [Migration("20230821124654_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -97,10 +97,10 @@ namespace WebApplication4.Migrations
                         new
                         {
                             Id = 1,
-                            created_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8589),
+                            created_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2788),
                             name = "A1",
                             status = 'A',
-                            updated_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8589)
+                            updated_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2788)
                         });
                 });
 
@@ -149,12 +149,12 @@ namespace WebApplication4.Migrations
                         new
                         {
                             id = 1,
-                            created_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8503),
+                            created_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2678),
                             name = "Süleyman",
                             password = "cRDtpNCeBiql5KOQsKVyrA0sAiA=",
                             status = 'A',
                             surname = "Solak",
-                            updated_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8504),
+                            updated_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2680),
                             user_name = "suleymansolak"
                         });
                 });
@@ -167,10 +167,10 @@ namespace WebApplication4.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Meetingid")
+                    b.Property<int>("MeetingId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Userid")
+                    b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("created_time")
@@ -185,9 +185,9 @@ namespace WebApplication4.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Meetingid");
+                    b.HasIndex("MeetingId");
 
-                    b.HasIndex("Userid");
+                    b.HasIndex("UserId");
 
                     b.ToTable("user_meetings", "public");
                 });
@@ -207,13 +207,13 @@ namespace WebApplication4.Migrations
                 {
                     b.HasOne("WebApplication4.Models.Entity.Meeting", "Meeting")
                         .WithMany("UserMeeting")
-                        .HasForeignKey("Meetingid")
+                        .HasForeignKey("MeetingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("WebApplication4.Models.Entity.User", "User")
                         .WithMany("UserMeeting")
-                        .HasForeignKey("Userid")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

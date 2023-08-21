@@ -8,7 +8,10 @@ namespace WebApplication4.Models.Entity
         public int Id { get; set; }
         public DateTime created_time { get; set; }
         public DateTime updated_time { get; set; }
+        public int MeetingId { get; set; }
         public Meeting Meeting { get; set;}
+        public int UserId { get; set; }
+
         public User User { get; set;}       
     }
 }
