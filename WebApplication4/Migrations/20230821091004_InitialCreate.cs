@@ -24,8 +24,8 @@ namespace WebApplication4.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     name = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<char>(type: "character(1)", nullable: false),
-                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -44,8 +44,8 @@ namespace WebApplication4.Migrations
                     surname = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<char>(type: "character(1)", nullable: false),
-                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -63,8 +63,8 @@ namespace WebApplication4.Migrations
                     from_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     to_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RoomId = table.Column<int>(type: "integer", nullable: false),
-                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -85,8 +85,8 @@ namespace WebApplication4.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    created_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
+                    updated_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValueSql: "now()"),
                     Meetingid = table.Column<int>(type: "integer", nullable: false),
                     Userid = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -111,9 +111,15 @@ namespace WebApplication4.Migrations
 
             migrationBuilder.InsertData(
                 schema: "public",
+                table: "rooms",
+                columns: new[] { "Id", "created_time", "name", "status", "updated_time" },
+                values: new object[] { 1, new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8589), "A1", 'A', new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8589) });
+
+            migrationBuilder.InsertData(
+                schema: "public",
                 table: "users",
                 columns: new[] { "id", "created_time", "name", "password", "status", "surname", "updated_time", "user_name" },
-                values: new object[] { 1, new DateTime(2023, 8, 16, 13, 31, 26, 671, DateTimeKind.Utc).AddTicks(833), "Süleyman", "cRDtpNCeBiql5KOQsKVyrA0sAiA=", 'A', "Solak", new DateTime(2023, 8, 16, 13, 31, 26, 671, DateTimeKind.Utc).AddTicks(835), "suleymansolak" });
+                values: new object[] { 1, new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8503), "Süleyman", "cRDtpNCeBiql5KOQsKVyrA0sAiA=", 'A', "Solak", new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8504), "suleymansolak" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_meetings_RoomId",

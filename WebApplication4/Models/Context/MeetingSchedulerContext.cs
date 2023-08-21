@@ -33,6 +33,15 @@ namespace WebApplication4.Models.Context
             //base.OnModelCreating(modelBuilder);
             SHA1 sha = new SHA1CryptoServiceProvider();
             modelBuilder.HasDefaultSchema("public");
+            modelBuilder.Entity<User>().Property(b => b.created_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<User>().Property(b=> b.updated_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<UserMeeting>().Property(b => b.created_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<UserMeeting>().Property(b=> b.updated_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<Room>().Property(b => b.created_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<Room>().Property(b=> b.updated_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<Meeting>().Property(b => b.created_time).HasDefaultValueSql("now()");
+            modelBuilder.Entity<Meeting>().Property(b=> b.updated_time).HasDefaultValueSql("now()");
+            
 
             modelBuilder.Entity<User>().HasData(
             new User
@@ -47,6 +56,15 @@ namespace WebApplication4.Models.Context
             updated_time = DateTime.UtcNow,
              }
             );
+            modelBuilder.Entity<Room>().HasData(
+                new Room
+                {
+                    Id = 1,
+                    name = "A1",
+                    status = 'A',
+                    created_time = DateTime.UtcNow,
+                    updated_time = DateTime.UtcNow,
+                });
         }
 
 

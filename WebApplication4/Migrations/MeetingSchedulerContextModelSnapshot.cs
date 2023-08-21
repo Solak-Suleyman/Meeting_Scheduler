@@ -35,7 +35,9 @@ namespace WebApplication4.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("created_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime>("from_date")
                         .HasColumnType("timestamp with time zone");
@@ -48,7 +50,9 @@ namespace WebApplication4.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("updated_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.HasKey("id");
 
@@ -66,7 +70,9 @@ namespace WebApplication4.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("created_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -76,11 +82,23 @@ namespace WebApplication4.Migrations
                         .HasColumnType("character(1)");
 
                     b.Property<DateTime>("updated_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.HasKey("Id");
 
                     b.ToTable("rooms", "public");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            created_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8589),
+                            name = "A1",
+                            status = 'A',
+                            updated_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8589)
+                        });
                 });
 
             modelBuilder.Entity("WebApplication4.Models.Entity.User", b =>
@@ -92,7 +110,9 @@ namespace WebApplication4.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
 
                     b.Property<DateTime>("created_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -110,7 +130,9 @@ namespace WebApplication4.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("updated_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<string>("user_name")
                         .IsRequired()
@@ -124,12 +146,12 @@ namespace WebApplication4.Migrations
                         new
                         {
                             id = 1,
-                            created_time = new DateTime(2023, 8, 16, 13, 31, 26, 671, DateTimeKind.Utc).AddTicks(833),
+                            created_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8503),
                             name = "Süleyman",
                             password = "cRDtpNCeBiql5KOQsKVyrA0sAiA=",
                             status = 'A',
                             surname = "Solak",
-                            updated_time = new DateTime(2023, 8, 16, 13, 31, 26, 671, DateTimeKind.Utc).AddTicks(835),
+                            updated_time = new DateTime(2023, 8, 21, 9, 10, 3, 951, DateTimeKind.Utc).AddTicks(8504),
                             user_name = "suleymansolak"
                         });
                 });
@@ -149,10 +171,14 @@ namespace WebApplication4.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("created_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.Property<DateTime>("updated_time")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("now()");
 
                     b.HasKey("Id");
 

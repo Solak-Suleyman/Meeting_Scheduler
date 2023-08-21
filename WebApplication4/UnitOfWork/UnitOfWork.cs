@@ -5,7 +5,7 @@ using System.Data.Entity.Validation;
 using Microsoft.EntityFrameworkCore;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using Microsoft.EntityFrameworkCore.Storage;
-
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 namespace WebApplication4.UnitOfWork
 {
     public class UnitOfWork<TContext> : IUnitOfWork<TContext>, IDisposable where TContext: MeetingSchedulerContext, new()
@@ -68,5 +68,30 @@ namespace WebApplication4.UnitOfWork
                 throw new Exception(_errorMessage, dbEx);
             }
         }
+        //public override int SaveChanges()
+        //{
+        //    var now = DateTime.UtcNow;
+
+        //    foreach (var changedEntity in ChangeTracker.Entries())
+        //    {
+        //        if (changedEntity.Entity is IEntityDate entity)
+        //        {
+        //            switch (changedEntity.State)
+        //            {
+        //                case EntityState.Added:
+        //                    entity.CreatedDate = now;
+        //                    entity.UpdatedDate = now;
+        //                    break;
+
+        //                case EntityState.Modified:
+        //                    Entry(entity).Property(x => x.CreatedDate).IsModified = false;
+        //                    entity.UpdatedDate = now;
+        //                    break;
+        //            }
+        //        }
+        //    }
+
+        //    return Context.SaveChanges();
+        //}
     }
 }

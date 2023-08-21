@@ -12,6 +12,7 @@ using WebApplication4.UnitOfWork;
 using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using AutoMapper;
 using WebApplication4.NonGenericRepository;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace WebApplication4.Controllers
 {
@@ -57,7 +58,7 @@ namespace WebApplication4.Controllers
         [Route("/api/users/GetUserById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
         //get by username
-        public IActionResult Get([FromBody] int id)
+        public IActionResult Get([FromQuery] int id)
         {
             var response=genericRepository.GetById(id);
             return new JsonResult(response);
@@ -79,6 +80,10 @@ namespace WebApplication4.Controllers
         {
             try
             {
+                if (user == null)
+                {
+                    return BadRequest("user boş");
+                }
                 unitOfWork.CreateTransaction();
                 if (ModelState.IsValid)
                 {
@@ -100,12 +105,13 @@ namespace WebApplication4.Controllers
                     return Ok(users);
                 }
             }
-            catch (Exception)
+            catch (Exception err)
             {
 
                 unitOfWork.Rollback();
+                return BadRequest(err);
             }
-            return Ok();
+            return BadRequest("Girmedi");
         }
         //update existing user
         [HttpPost]
@@ -115,23 +121,77 @@ namespace WebApplication4.Controllers
         {
             User userr= genericRepository.GetById(user.id);
             User user1 = _mapper.Map<User>(userr);
-            if (ModelState.IsValid)
+            try
             {
-                genericRepository.Update(user1);
-                unitOfWork.Commit();
-                unitOfWork.Save();
-                return Ok(user1);
+                if (ModelState.IsValid)
+                {
+                    genericRepository.Update(user1);
+                    unitOfWork.Commit();
+                    unitOfWork.Save();
+                    return Ok(user1);
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
-            else
+            catch (Exception)
             {
+                unitOfWork.Rollback();
                 return BadRequest();
             }
+            
         }
+        [HttpPatch]
+        [Route("/api/user/editUserpartial")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        public IActionResult EditUserPartial(int id, [FromBody]JsonPatchDocument<User> patchDTO)
+        {
+
+            try
+            {
+                if (patchDTO != null || id != 0)
+                {
+
+                    User user = genericRepository.GetById(id);
+                    if (user == null)
+                    {
+                        return BadRequest();
+                    }
+
+
+                    patchDTO.ApplyTo(user, ModelState);
+                    if (!ModelState.IsValid)
+                    {
+                        return BadRequest();
+                    }
+                    unitOfWork.CreateTransaction();
+                    genericRepository.Update(user);
+                    unitOfWork.Commit();
+                    unitOfWork.Save();
+                    return Ok(user);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            catch (Exception)
+            {
+                unitOfWork.Rollback();
+                return BadRequest();
+            }
+            
+
+
+
+            }        
         [HttpDelete]
         [Route("/api/user/banUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public void DeleteUser(int id)
         {
+
             unitOfWork.CreateTransaction();
             User user = genericRepository.GetById(id);
             try
