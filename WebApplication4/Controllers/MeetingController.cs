@@ -113,7 +113,6 @@ namespace WebApplication4.Controllers
             {
                 unitOfWork.Rollback();
                 return BadRequest(ex.Message);
-                throw;
             }
         }
 

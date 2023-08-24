@@ -34,6 +34,11 @@ internal class Program
         app.UseAuthorization();
 
         app.MapControllers();
+        app.UseCors(builder => builder
+       .AllowAnyHeader()
+       .AllowAnyMethod()
+       .AllowAnyOrigin()
+        );
 
         //using (var ctx = new MeetingSchedulerContext())
         //{

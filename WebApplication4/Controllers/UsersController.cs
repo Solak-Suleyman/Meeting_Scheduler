@@ -13,6 +13,7 @@ using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using AutoMapper;
 using WebApplication4.NonGenericRepository;
 using Microsoft.AspNetCore.JsonPatch;
+using NuGet.Protocol;
 
 namespace WebApplication4.Controllers
 {
@@ -52,7 +53,7 @@ namespace WebApplication4.Controllers
 
             //}
             var response = genericRepository.GetAll();
-            return new JsonResult(response);
+            return Ok(response.ToJson());
         }
         [HttpGet]
         [Route("/api/users/GetUserById")]
@@ -61,15 +62,27 @@ namespace WebApplication4.Controllers
         public IActionResult Get([FromQuery] int id)
         {
             var response=genericRepository.GetById(id);
-            return new JsonResult(response);
+            return Ok(response);
         }
         //get by username
         [HttpGet]
         [Route("/api/users/GetByUserName")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Getuser([FromQuery] string user_name)
         {
+            if (user_name == null)
+            {
+                return BadRequest("UserName cannot be null");
+            }
             var response = userRepository.GetByUserName(user_name);
+            if(response != null) {
+                return new JsonResult(response);    
+            }
+            if (response == null)
+            {
+                return BadRequest();
+            }
             return Ok(response);
         }
         //add new user

@@ -15,7 +15,12 @@ namespace WebApplication4.NonGenericRepository
 
         public IEnumerable<User> GetByUserName(string user_name)
         {
-            return Context.Users.Where(usr=>usr.user_name == user_name).ToList();
+            var response= Context.Users.Where(usr => usr.user_name == user_name).ToList();
+            if (response.Count() == 0)
+            {
+                return null;
+            }
+            return response; 
         }
     }
 }
