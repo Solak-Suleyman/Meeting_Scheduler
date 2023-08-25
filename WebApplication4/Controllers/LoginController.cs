@@ -11,7 +11,7 @@ using NuGet.Protocol;
 namespace WebApplication4.Controllers
 {
     [ApiController]
-    [Route("/api/Auth")]
+    [Route("/api")]
     public class LoginController:ControllerBase
     {
         
@@ -22,7 +22,7 @@ namespace WebApplication4.Controllers
 
             this.userRepository = new UserRepository(unitOfWork);
         }
-        [HttpPost("/login")]
+        [HttpPost("/api/login")]
         public IActionResult Login( string user_name, [FromBody] string password)
         {
             try

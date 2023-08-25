@@ -9,7 +9,7 @@ using WebApplication4.UnitOfWork;
 namespace WebApplication4.Controllers
 {
     [ApiController]
-    [Route("/api/Auth")]
+    [Route("api/")]
 
     public class RegisterController : ControllerBase
     {
