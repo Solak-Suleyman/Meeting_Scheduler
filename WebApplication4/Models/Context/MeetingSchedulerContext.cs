@@ -40,8 +40,9 @@ namespace WebApplication4.Models.Context
             modelBuilder.Entity<Room>().Property(b => b.created_time).HasDefaultValueSql("now()");
             modelBuilder.Entity<Room>().Property(b=> b.updated_time).HasDefaultValueSql("now()");
             modelBuilder.Entity<Meeting>().Property(b => b.created_time).HasDefaultValueSql("now()");
+            //modelBuilder.Entity<Meeting>().Property(b => b.created_time).ValueGeneratedOnAddOrUpdate();
             modelBuilder.Entity<Meeting>().Property(b=> b.updated_time).HasDefaultValueSql("now()");
-            
+            //modelBuilder.Entity<Meeting>().Property(b => b.updated_time).ValueGeneratedOnAddOrUpdate();
 
             modelBuilder.Entity<User>().HasData(
             new User

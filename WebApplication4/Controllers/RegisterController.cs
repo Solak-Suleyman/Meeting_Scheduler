@@ -9,7 +9,7 @@ using WebApplication4.UnitOfWork;
 namespace WebApplication4.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("/api/register")]
 
     public class RegisterController : ControllerBase
     {
@@ -22,7 +22,7 @@ namespace WebApplication4.Controllers
             this.genericRepository = new GenericRepository<User>(unitOfWork);
             this._mapper = mapper;
         }
-        [HttpPost("/register")]
+        [HttpPost]
         public ActionResult Register([FromBody] UsersDTO user)
         {
 

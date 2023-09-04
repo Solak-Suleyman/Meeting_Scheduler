@@ -12,7 +12,7 @@ using WebApplication4.Models.Context;
 namespace WebApplication4.Migrations
 {
     [DbContext(typeof(MeetingSchedulerContext))]
-    [Migration("20230821124654_InitialCreate")]
+    [Migration("20230831114022_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -97,10 +97,10 @@ namespace WebApplication4.Migrations
                         new
                         {
                             Id = 1,
-                            created_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2788),
+                            created_time = new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(3091),
                             name = "A1",
                             status = 'A',
-                            updated_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2788)
+                            updated_time = new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(3091)
                         });
                 });
 
@@ -149,12 +149,12 @@ namespace WebApplication4.Migrations
                         new
                         {
                             id = 1,
-                            created_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2678),
+                            created_time = new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(2945),
                             name = "Süleyman",
                             password = "cRDtpNCeBiql5KOQsKVyrA0sAiA=",
                             status = 'A',
                             surname = "Solak",
-                            updated_time = new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2680),
+                            updated_time = new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(2949),
                             user_name = "suleymansolak"
                         });
                 });

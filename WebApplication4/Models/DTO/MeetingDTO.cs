@@ -9,6 +9,6 @@ namespace WebApplication4.Models.DTO
         public DateTime from_date { get; set; }
         public DateTime to_date { get; set; }
         public int RoomId { get; set; }
-
+        public List<int> UserIds { get; set; }
     }
 }

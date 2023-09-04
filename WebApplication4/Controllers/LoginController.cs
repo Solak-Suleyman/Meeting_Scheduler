@@ -23,16 +23,15 @@ namespace WebApplication4.Controllers
             this.userRepository = new UserRepository(unitOfWork);
         }
         [HttpPost("/api/login")]
-        public IActionResult Login( string user_name, [FromBody] string password)
+        public IActionResult Login( string user_name, string password)
         {
             try
             {
-                if (user_name == null) { return BadRequest(); }
-                if (password == null) { return BadRequest(); }
+                if (user_name == null   || password == null) { return BadRequest("user_name cannot be null"); }
 
                 var user = userRepository.GetByUserName(user_name);
 
-                if (user == null) { return BadRequest(); }
+                if (user == null) { return BadRequest("kullanıcı Bulunamadı"); }
                 User response =user.FirstOrDefault();
                 //User user1 = JsonSerializer.Deserialize<User>(user);
                 if(response != null) {
@@ -42,7 +41,7 @@ namespace WebApplication4.Controllers
                     }
                     else
                     {
-                        return BadRequest();
+                        return BadRequest("Şifre veya Kullanıcı adı yanlış");
                     }
                 }
                 return BadRequest("Kullanıcı bulunamadı");

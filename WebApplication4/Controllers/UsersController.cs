@@ -21,7 +21,7 @@ namespace WebApplication4.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private IUnitOfWork<MeetingSchedulerContext>unitOfWork=new UnitOfWork<MeetingSchedulerContext>();
+        private IUnitOfWork<MeetingSchedulerContext> unitOfWork = new UnitOfWork<MeetingSchedulerContext>();
         private GenericRepository<User> genericRepository;
         private IUserRepository userRepository;
         private readonly IMapper _mapper;
@@ -29,7 +29,7 @@ namespace WebApplication4.Controllers
         public UsersController(IMapper mapper)
         {
             this.genericRepository = new GenericRepository<User>(unitOfWork);
-            this.userRepository=new UserRepository(unitOfWork);
+            this.userRepository = new UserRepository(unitOfWork);
             this._mapper = mapper;
         }
 
@@ -61,7 +61,7 @@ namespace WebApplication4.Controllers
         //get by username
         public IActionResult Get([FromQuery] int id)
         {
-            var response=genericRepository.GetById(id);
+            var response = genericRepository.GetById(id);
             return Ok(response);
         }
         //get by username
@@ -76,8 +76,9 @@ namespace WebApplication4.Controllers
                 return BadRequest("UserName cannot be null");
             }
             var response = userRepository.GetByUserName(user_name);
-            if(response != null) {
-                return new JsonResult(response);    
+            if (response != null)
+            {
+                return Ok(response);
             }
             if (response == null)
             {
@@ -100,7 +101,7 @@ namespace WebApplication4.Controllers
                 unitOfWork.CreateTransaction();
                 if (ModelState.IsValid)
                 {
-                    User users=_mapper.Map<User>(user);
+                    User users = _mapper.Map<User>(user);
                     //User users = new User
                     //{
                     //    id = user.id,
@@ -158,12 +159,12 @@ namespace WebApplication4.Controllers
         //        unitOfWork.Rollback();
         //        return BadRequest(ex);
         //    }
-            
+
         //}
         [HttpPatch]
         [Route("/api/user/editUserpartial")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(User))]
-        public IActionResult EditUserPartial(int id, [FromBody]JsonPatchDocument<User> patchDTO)
+        public IActionResult EditUserPartial(int id, [FromBody] JsonPatchDocument<User> patchDTO)
         {
 
             try
@@ -199,11 +200,11 @@ namespace WebApplication4.Controllers
                 unitOfWork.Rollback();
                 return BadRequest();
             }
-            
 
 
 
-            }        
+
+        }
         [HttpDelete]
         [Route("/api/user/banUser")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -226,8 +227,8 @@ namespace WebApplication4.Controllers
 
                 unitOfWork.Rollback();
             }
-            
-            
+
+
         }
 
         //    public IActionResult Get(int id) {

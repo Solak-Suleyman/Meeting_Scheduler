@@ -8,10 +8,11 @@ using System.Collections.Generic;
 using WebApplication4.UnitOfWork;
 using WebApplication4.Models;
 using Microsoft.EntityFrameworkCore;
+using WebApplication4.Models.Entity;
 
 namespace WebApplication4.GenericRepository
 {
-    public class GenericRepository<T> : IGenericRepository<T>, IDisposable where T : class
+    public class GenericRepository<T> : UserMeeting ,IGenericRepository<T>, IDisposable where T : class
     {
 
         public DbSet<T> _entities;

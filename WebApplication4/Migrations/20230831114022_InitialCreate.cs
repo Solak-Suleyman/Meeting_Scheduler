@@ -113,13 +113,13 @@ namespace WebApplication4.Migrations
                 schema: "public",
                 table: "rooms",
                 columns: new[] { "Id", "created_time", "name", "status", "updated_time" },
-                values: new object[] { 1, new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2788), "A1", 'A', new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2788) });
+                values: new object[] { 1, new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(3091), "A1", 'A', new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(3091) });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "users",
                 columns: new[] { "id", "created_time", "name", "password", "status", "surname", "updated_time", "user_name" },
-                values: new object[] { 1, new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2678), "Süleyman", "cRDtpNCeBiql5KOQsKVyrA0sAiA=", 'A', "Solak", new DateTime(2023, 8, 21, 12, 46, 54, 25, DateTimeKind.Utc).AddTicks(2680), "suleymansolak" });
+                values: new object[] { 1, new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(2945), "Süleyman", "cRDtpNCeBiql5KOQsKVyrA0sAiA=", 'A', "Solak", new DateTime(2023, 8, 31, 11, 40, 22, 620, DateTimeKind.Utc).AddTicks(2949), "suleymansolak" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_meetings_RoomId",

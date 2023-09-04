@@ -2,12 +2,16 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.Operations;
-using System.Data.Entity;
+using NuGet.Protocol;
+using NuGet.Protocol.Plugins;
+
 using WebApplication4.GenericRepository;
 using WebApplication4.Models.Context;
 using WebApplication4.Models.DTO;
 using WebApplication4.Models.Entity;
 using WebApplication4.UnitOfWork;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace WebApplication4.Controllers
 {
@@ -15,13 +19,15 @@ namespace WebApplication4.Controllers
     [Route("api/meetings")]
     public class MeetingController : ControllerBase
     {
-        private IUnitOfWork<MeetingSchedulerContext> unitOfWork = new UnitOfWork<MeetingSchedulerContext>();
+        private UnitOfWork<MeetingSchedulerContext> unitOfWork = new UnitOfWork<MeetingSchedulerContext>();
         private GenericRepository<Meeting> genericRepository;
         private readonly IMapper _mapper;
+        private UserMeetingController UserMeetingController { get; set; }
         public MeetingController(IMapper mapper)
         {
             this.genericRepository = new GenericRepository<Meeting>(unitOfWork);
             this._mapper = mapper;
+            this.UserMeetingController = new UserMeetingController(mapper);
         }
         [HttpGet]
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status200OK)]
@@ -31,8 +37,12 @@ namespace WebApplication4.Controllers
         {
             try
             {
-                var response = genericRepository.GetAll();
-                return Ok(response);
+                var response = genericRepository.Context.Meetings
+                .Include(b => b.UserMeeting)
+                .Include(b => b.Room)
+                .ToList();
+                //var response = genericRepository.GetAll();
+                return Ok(response/*.ToJson()*/);
             }
             catch (Exception ex)
             {
@@ -40,7 +50,7 @@ namespace WebApplication4.Controllers
             }
         }
         [HttpPost("addmeeting")]
-        [ProducesResponseType(typeof(MeetingDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult addMeeting(MeetingDTO meetingDTO)
@@ -50,13 +60,23 @@ namespace WebApplication4.Controllers
                 if (meetingDTO != null)
                 {
 
-                    unitOfWork.CreateTransaction();
+
                     Meeting meeting = _mapper.Map<Meeting>(meetingDTO);
+
+
+                    unitOfWork.CreateTransaction();
                     genericRepository.Insert(meeting);
                     unitOfWork.Save();
                     unitOfWork.Commit();
-                    return Ok();
+                    Console.WriteLine(meeting.id);
+                    UserMeetingController.AddUserMeeting(meetingDTO.UserIds, meeting.id);
 
+                    return Ok(/*usrmntng*/);
+
+                }
+                else
+                {
+                    return BadRequest("meeting voş olamaz");
                 }
             }
             catch (Exception ex)
@@ -67,8 +87,9 @@ namespace WebApplication4.Controllers
             }
             return BadRequest();
         }
-        [HttpPatch("/editMeeting")]
-        public ActionResult EditMeeting(int id, JsonPatchDocument<Meeting> patchDTO) {
+        [HttpPatch("/editMeetingPartial")]
+        public ActionResult EditMeetingPartial(int id, JsonPatchDocument<Meeting> patchDTO)
+        {
             try
             {
                 unitOfWork.CreateTransaction();
@@ -79,7 +100,9 @@ namespace WebApplication4.Controllers
                 {
                     return BadRequest();
                 }
+                //apply patch to meeting
                 patchDTO.ApplyTo(meeting, ModelState);
+                //
                 if (!ModelState.IsValid)
                 {
                     return BadRequest();
@@ -95,10 +118,37 @@ namespace WebApplication4.Controllers
                 return BadRequest();
             }
         }
+        [HttpPost("/editMeeting")]
+        public ActionResult EditMeeting(MeetingDTO meetingDTO)
+        {
+            try
+            {
+                if (meetingDTO == null)
+                {
+                    return BadRequest("Fields cannot be null");
+                }
+                unitOfWork.CreateTransaction();
+                //Meeting meeting = genericRepository.GetById(meetingDTO.id);
+                //if(meeting == null) { return BadRequest("Meeting Cannot Found"); }
+                Meeting meeting1 = _mapper.Map<Meeting>(meetingDTO);
+                genericRepository.Update(meeting1);
+                unitOfWork.Commit();
+                unitOfWork.Save();
+                UserMeetingController.DeleteByMeetingId(meeting1.id);
+                UserMeetingController.AddUserMeeting(meetingDTO.UserIds, meeting1.id);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                unitOfWork.Rollback();
+                return BadRequest(ex);
+
+            }
+        }
         [HttpDelete("/deleteMeeting")]
         public ActionResult DeleteMeeting(int id)
         {
-       
+
             try
             {
                 unitOfWork.CreateTransaction();

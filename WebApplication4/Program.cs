@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
 using WebApplication4.Models.Context;
@@ -19,7 +21,11 @@ internal class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddDbContext<MeetingSchedulerContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MeetingScheduler")));
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-        builder.Services.AddControllers().AddNewtonsoftJson();
+        builder.Services.AddControllers().AddNewtonsoftJson(options =>
+        {
+            options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+        });
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

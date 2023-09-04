@@ -13,9 +13,9 @@ namespace WebApplication4.Models.Entity
         public string password { get; set; }
         public char status { get; set; }
         public DateTime created_time { get; set; }
-        public DateTime updated_time { get; set;}
+        public DateTime updated_time { get; set; }
         //public UserMeeting UserMeeting { get; set; }
 
-        public  ICollection<UserMeeting> UserMeeting { get; set; }
+        public ICollection<UserMeeting>? UserMeeting { get; set; }=new List<UserMeeting>();
     }
 }
