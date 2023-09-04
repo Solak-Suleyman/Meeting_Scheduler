@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 using System.Text;
 using WebApplication4.Models.Context;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 using WebApplication4.Models.Entity;
 internal class Program
@@ -14,7 +16,7 @@ internal class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        
+
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -26,6 +28,24 @@ internal class Program
             options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
         });
+        //builder.Services.AddAuthentication(options =>
+        //{
+        //    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        //    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        //}).AddJwtBearer(options =>
+        //{
+        //    options.TokenValidationParameters = new TokenValidationParameters
+        //    {
+        //        ValidateIssuer = true,
+        //        ValidateAudience = true,
+        //        ValidateLifetime = true,
+        //        ValidateIssuerSigningKey = true,
+        //        ValidIssuer = "your_issuer",
+        //        ValidAudience = "your_audience",
+        //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("your_secret_key")),
+        //        ClockSkew = TimeSpan.Zero,
+        //    };
+        //});
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -61,6 +81,6 @@ internal class Program
         //}
         app.Run();
 
-       
+
     }
 }

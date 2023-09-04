@@ -8,6 +8,6 @@ namespace WebApplication4.NonGenericRepository
     public interface IUserMeetingRepository
     {
         void DeleteByMeetingID(int id);
-       IEnumerable<User> GetUsersBymeeting(DateTime startDate, DateTime endDate);
+       List<User> GetUsersBymeeting(DateTime startDate, DateTime endDate);
     }
 }
