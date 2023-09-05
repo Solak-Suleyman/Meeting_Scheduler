@@ -77,7 +77,7 @@ namespace WebApplication4.Controllers
         {
             _userMeetingRepository.DeleteByMeetingID(meetingId);
         }
-        [HttpGet("/getByMeeting")]
+        [HttpGet("/api/usermeeting/getByMeeting")]
 
         public ActionResult GetByMeeting(DateTime startDate, DateTime endDate)
         {

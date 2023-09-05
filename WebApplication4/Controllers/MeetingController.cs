@@ -29,6 +29,25 @@ namespace WebApplication4.Controllers
             this._mapper = mapper;
             this.UserMeetingController = new UserMeetingController(mapper);
         }
+        [HttpGet("GetMeetingById")]
+        [ProducesResponseType(typeof(Meeting), StatusCodes.Status200OK)]
+        public IActionResult GetMeetingById(int id)
+        {
+            try
+            {
+                //var response =genericRepository.GetById(id);
+                var response=genericRepository.Context.Meetings
+                    .Include(b=>b.UserMeeting).ThenInclude(b=>b.User)
+                    .Include(b=>b.Room).Where(b=>b.id==id)
+                    .ToList();
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+
+            }
+        }
         [HttpGet]
         [ProducesResponseType(typeof(Meeting), StatusCodes.Status200OK)]
         //[ProducesResponseType(typeof(Meeting), StatusCodes.Status400BadRequest)]
@@ -53,6 +72,7 @@ namespace WebApplication4.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+
         public IActionResult addMeeting(MeetingDTO meetingDTO)
         {
             try
@@ -87,7 +107,7 @@ namespace WebApplication4.Controllers
             }
             return BadRequest();
         }
-        [HttpPatch("/editMeetingPartial")]
+        [HttpPatch("editMeetingPartial")]
         public ActionResult EditMeetingPartial(int id, JsonPatchDocument<Meeting> patchDTO)
         {
             try
@@ -118,7 +138,7 @@ namespace WebApplication4.Controllers
                 return BadRequest();
             }
         }
-        [HttpPost("/editMeeting")]
+        [HttpPost("editMeeting")]
         public ActionResult EditMeeting(MeetingDTO meetingDTO)
         {
             try
@@ -145,7 +165,7 @@ namespace WebApplication4.Controllers
 
             }
         }
-        [HttpDelete("/deleteMeeting")]
+        [HttpDelete("deleteMeeting")]
         public ActionResult DeleteMeeting(int id)
         {
 
