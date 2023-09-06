@@ -11,7 +11,7 @@ using WebApplication4.Models.DTO;
 using WebApplication4.Models.Entity;
 using WebApplication4.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApplication4.Controllers
 {
@@ -166,6 +166,7 @@ namespace WebApplication4.Controllers
             }
         }
         [HttpDelete("deleteMeeting")]
+        [Authorize]
         public ActionResult DeleteMeeting(int id)
         {
 

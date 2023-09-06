@@ -17,12 +17,12 @@ namespace WebApplication4.NonGenericRepository
             return null;
         }
 
-        public IEnumerable<User> GetByUserName(string user_name)
+        public User GetByUserName(string user_name)
         {
-            var response = Context.Users.Where(b => b.user_name == user_name)
+            User response = Context.Users.Where(b => b.user_name == user_name)
                 .Include(b => b.UserMeeting)
-                .ToList();
-            if (response.Count() == 0)
+                .FirstOrDefault();
+            if (response == null)
             {
                 return null;
             }

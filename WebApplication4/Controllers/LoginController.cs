@@ -32,7 +32,7 @@ namespace WebApplication4.Controllers
                 var user = userRepository.GetByUserName(user_name);
 
                 if (user == null) { return BadRequest("kullanıcı Bulunamadı"); }
-                User response =user.FirstOrDefault();
+                User response =user;
                 //User user1 = JsonSerializer.Deserialize<User>(user);
                 if(response != null) {
                     if (response.password.Equals(password))

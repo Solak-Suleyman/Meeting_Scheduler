@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using WebApplication4.Models.Entity;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Identity;
 
 internal class Program
 {
@@ -55,6 +56,34 @@ internal class Program
         }
     });
         });
+        var connectionString = builder.Configuration.GetConnectionString("MeetingScheduler");
+
+        builder.Services.AddDbContext<AuthContext>(options => options.UseNpgsql(connectionString));
+        builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddEntityFrameworkStores<AuthContext>();
+
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            var secret = builder.Configuration.GetValue<string>("Secret");
+            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
+            x.RequireHttpsMetadata = true;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidAudience = "https://localhost:7000/",
+                ValidIssuer = "https://localhost:7000/",
+                IssuerSigningKey = key,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
         builder.Services.AddDbContext<MeetingSchedulerContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("MeetingScheduler")));
         builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddControllers().AddNewtonsoftJson(options =>
@@ -92,6 +121,7 @@ internal class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+        app.UseAuthentication();
 
         app.MapControllers();
         app.UseCors(builder => builder
