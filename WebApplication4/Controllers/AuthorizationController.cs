@@ -21,7 +21,7 @@ namespace WebApplication4.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly IUserStore<IdentityUser> _userStore;
         private readonly IUserEmailStore<IdentityUser> _emailStore;
-
+        private AuthorizationRepository _authorizationRepository;
         private readonly IConfiguration _configuration;
 
         public AuthorizationController(
@@ -30,7 +30,7 @@ namespace WebApplication4.Controllers
             SignInManager<IdentityUser> signInManager,
             IUserStore<IdentityUser> userStore)
         {
-
+            _authorizationRepository=new AuthorizationRepository(unitOfWork,configuration);
             _userManager = new UserRepository(unitOfWork);
             _configuration = configuration;
             _signInManager = signInManager;
@@ -49,52 +49,16 @@ namespace WebApplication4.Controllers
                 //401 or 404
                 return Unauthorized();
             }
-            if(!user.password.Equals(request.Password)) {
+            if (!user.password.Equals(request.Password))
+            {
                 return Unauthorized();
             }
 
-                
-            
-            var resp = GenerateAuthorizationToken(user.id.ToString(), user.user_name);
+
+
+            var resp = _authorizationRepository.GenerateAuthorizationToken(user.id.ToString(), user.user_name);
 
             return Ok(resp);
-        }
-        private AuthorizationResponse GenerateAuthorizationToken(string userId, string userName)
-        {
-            var now = DateTime.UtcNow;
-            var secret = _configuration.GetValue<string>("Secret");
-            var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secret));
-
-            var userClaims = new List<Claim>
-    {
-        new Claim(ClaimsIdentity.DefaultNameClaimType, userName),
-        new Claim(ClaimTypes.NameIdentifier, userId),
-    };
-
-            //userClaims.AddRange(roles.Select(r => new Claim(ClaimsIdentity.DefaultRoleClaimType, r)));
-
-            var expires = now.Add(TimeSpan.FromMinutes(60));
-
-            var jwt = new JwtSecurityToken(
-                    notBefore: now,
-                    claims: userClaims,
-                    expires: expires,
-                    audience: "https://localhost:7000/",
-                    issuer: "https://localhost:7000/",
-                    signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
-
-            //we don't know about thread safety of token handler
-
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            var resp = new AuthorizationResponse
-            {
-                UserId = userId,
-                AuthorizationToken = encodedJwt,
-                RefreshToken = string.Empty
-            };
-
-            return resp;
         }
     }
 }

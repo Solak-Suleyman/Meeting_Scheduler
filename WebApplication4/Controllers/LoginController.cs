@@ -12,10 +12,10 @@ namespace WebApplication4.Controllers
 {
     [ApiController]
     [Route("/api")]
-    public class LoginController:ControllerBase
+    public class LoginController : ControllerBase
     {
-        
-        private IUnitOfWork<MeetingSchedulerContext> unitOfWork=new UnitOfWork<MeetingSchedulerContext>();
+
+        private IUnitOfWork<MeetingSchedulerContext> unitOfWork = new UnitOfWork<MeetingSchedulerContext>();
         private IUserRepository userRepository;
         public LoginController()
         {
@@ -23,18 +23,19 @@ namespace WebApplication4.Controllers
             this.userRepository = new UserRepository(unitOfWork);
         }
         [HttpPost("/api/login")]
-        public IActionResult Login( string user_name, string password)
+        public IActionResult Login(string user_name, string password)
         {
             try
             {
-                if (user_name == null   || password == null) { return BadRequest("user_name cannot be null"); }
+                if (user_name == null || password == null) { return BadRequest("user_name cannot be null"); }
 
                 var user = userRepository.GetByUserName(user_name);
 
                 if (user == null) { return BadRequest("kullanıcı Bulunamadı"); }
-                User response =user;
+                User response = user;
                 //User user1 = JsonSerializer.Deserialize<User>(user);
-                if(response != null) {
+                if (response != null)
+                {
                     if (response.password.Equals(password))
                     {
                         return Ok("Kullanıcı Bulundu");
@@ -45,14 +46,14 @@ namespace WebApplication4.Controllers
                     }
                 }
                 return BadRequest("Kullanıcı bulunamadı");
-            
+
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-                
+
             }
-            
+
         }
 
     }
